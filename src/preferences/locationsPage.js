@@ -23,6 +23,7 @@ import GLib from 'gi://GLib';
 
 import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
+
 // Keep enums in sync with GSettings schemas
 const GeolocationProvider = {
     OPENSTREETMAPS: 0,
@@ -595,7 +596,7 @@ var SearchResultsWindow = GObject.registerClass(
                         });
                 }
                 catch (e) {
-                    log("_findLocation OpenStreetMap error: " + e);
+                    console.error("_findLocation OpenStreetMap error: " + e);
                 }
             }
             // MapQuest
@@ -631,7 +632,7 @@ var SearchResultsWindow = GObject.registerClass(
                         });
                 }
                 catch (e) {
-                    log("_findLocation MapQuest error: " + e);
+                    console.error("_findLocation MapQuest error: " + e);
                 }
             }
             // Geocode.Farm
@@ -662,7 +663,7 @@ var SearchResultsWindow = GObject.registerClass(
                         });
                 }
                 catch (e) {
-                    log("_findLocation Geocode error: " + e);
+                    console.error("_findLocation Geocode error: " + e);
                 }
             }
             return 0;
@@ -673,8 +674,14 @@ var SearchResultsWindow = GObject.registerClass(
                 let _userAgent = 'openweather-modern@mateusfbi.gmail.com';
 
                 let _httpSession = new Soup.Session();
-                let _paramsHash = Soup.form_encode_hash(params);
-                let _message = Soup.Message.new_from_encoded_form('GET', url, _paramsHash);
+                let _query = "";
+                let _keys = Object.keys(params);
+                for (let i = 0; i < _keys.length; i++) {
+                    _query += _keys[i] + "=" + encodeURIComponent(params[_keys[i]]) + "&";
+                }
+                _query = _query.slice(0, -1); // remove last &
+
+                let _message = Soup.Message.new('GET', url + "?" + _query);
                 // add trailing space, so libsoup adds its own user-agent
                 _httpSession.user_agent = _userAgent + ' ';
 

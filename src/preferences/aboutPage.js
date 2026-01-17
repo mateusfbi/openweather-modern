@@ -22,7 +22,7 @@ import GdkPixbuf from 'gi://GdkPixbuf';
 import GObject from 'gi://GObject';
 
 import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
-import * as Config from 'resource:///org/gnome/Shell/Extensions/js/misc/config.js';
+
 
 export const AboutPage = GObject.registerClass(
     class OpenWeather_AboutPage extends Adw.PreferencesPage {
@@ -95,7 +95,7 @@ export const AboutPage = GObject.registerClass(
                 title: _("GNOME Version")
             });
             gnomeVersionRow.add_suffix(new Gtk.Label({
-                label: Config.PACKAGE_VERSION + '',
+                label: GLib.getenv('GNOME_SHELL_SESSION_MODE') || 'GNOME Shell',
             }));
             // session type
             let sessionTypeRow = new Adw.ActionRow({
@@ -133,17 +133,17 @@ export const AboutPage = GObject.registerClass(
                 uri: 'https://www.paypal.com/donate/?hosted_button_id=6FLPTVXCJBVVC'
             });
 
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(extension.path + '/media/gitlab-icon.png', -1, 50, true);
-            let gitlabImage = Gtk.Picture.new_for_pixbuf(pixbuf);
-            let gitlabButton = new Gtk.LinkButton({
-                child: gitlabImage,
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(extension.path + '/media/get-it-on-github.png', -1, 50, true);
+            let githubImage = Gtk.Picture.new_for_pixbuf(pixbuf);
+            let githubButton = new Gtk.LinkButton({
+                child: githubImage,
                 uri: extension.metadata.url
             });
             let imageLinksBox = new Adw.ActionRow();
 
             maintainerBox.append(maintainerAbout);
             imageLinksBox.add_prefix(donateButton);
-            imageLinksBox.add_suffix(gitlabButton);
+            imageLinksBox.add_suffix(githubButton);
             maintainerGroup.add(maintainerBox);
             imageLinksGroup.add(imageLinksBox);
             this.add(maintainerGroup);

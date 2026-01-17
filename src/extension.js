@@ -26,6 +26,9 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as GnomeSession from 'resource:///org/gnome/shell/misc/gnomeSession.js';
+import Shell from 'gi://Shell';
+
+const global = Shell.Global.get();
 
 import { Extension, gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as OpenWeatherMap from './openweathermap.js';
@@ -287,7 +290,7 @@ let OpenWeatherMenuButton = GObject.registerClass(
             this._settings = this._extension.getSettings();
 
             if (this._cities.length === 0)
-                this._cities = "43.6534817,-79.3839347>Toronto >0";
+                this._cities = "-12.9822499,-38.4812772>Salvador >0";
 
             this._currentLocation = this.extractCoord(this._city);
             this._isForecastDisabled = this._disable_forecast;
@@ -300,7 +303,7 @@ let OpenWeatherMenuButton = GObject.registerClass(
             let lang = GLib.get_language_names()[0];
             if (lang) {
                 // Strip encoding (e.g. .UTF-8)
-                lang = lang.split('.')[0];
+                lang = lang.split('.')[0].replace('_', '-');
                 if (lang === 'C')
                     this.locale = 'en';
                 else
@@ -328,7 +331,7 @@ let OpenWeatherMenuButton = GObject.registerClass(
                 }
                 else if (this.locationChanged()) {
                     if (this._cities.length === 0)
-                        this._cities = "43.6534817,-79.3839347>Toronto >0";
+                        this._cities = "-12.9822499,-38.4812772>Salvador >0";
                     this.showRefreshing();
                     if (this._selectCity._getOpenState())
                         this._selectCity.menu.toggle();
@@ -469,7 +472,7 @@ let OpenWeatherMenuButton = GObject.registerClass(
                     this._network_monitor.can_reach_async(address, cancellable, this._asyncReadyCallback.bind(this));
                 } catch (err) {
                     let title = _("Can not connect to %s").format(url);
-                    log(title + '\n' + err.message);
+                    console.log(title + '\n' + err.message);
                     this._checkConnectionStateRetry();
                 }
                 return false;
@@ -481,7 +484,7 @@ let OpenWeatherMenuButton = GObject.registerClass(
                 this._connected = this._network_monitor.can_reach_finish(res);
             } catch (err) {
                 let title = _("Can not connect to %s").format(this.getWeatherProviderURL());
-                log(title + '\n' + err.message);
+                console.log(title + '\n' + err.message);
                 this._checkConnectionStateRetry();
                 return;
             }
@@ -893,7 +896,7 @@ let OpenWeatherMenuButton = GObject.registerClass(
 
         _onPreferencesActivate() {
             this.menu.close();
-            ExtensionUtils.openPrefs();
+            this._extension.openPreferences();
             return 0;
         }
 

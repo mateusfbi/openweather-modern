@@ -21,6 +21,7 @@ import GObject from 'gi://GObject';
 
 import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
+
 export const LayoutPage = GObject.registerClass(
     class OpenWeather_LayoutPage extends Adw.PreferencesPage {
         _init(settings) {

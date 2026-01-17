@@ -116,7 +116,7 @@
       <summary>Position in Panel</summary>
     </key>
     <key type="i" name="position-index">
-      <default>0</default>
+      <default>1</default>
       <summary>Position in Panel</summary>
     </key>
     <key name="menu-alignment" type="d">

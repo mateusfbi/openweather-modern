@@ -20,6 +20,7 @@ import Gtk from 'gi://Gtk';
 import Gdk from 'gi://Gdk';
 
 import { ExtensionPreferences } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+
 import * as GeneralPrefs from './preferences/generalPage.js';
 import * as LayoutPrefs from './preferences/layoutPage.js';
 import * as LocationsPrefs from './preferences/locationsPage.js';

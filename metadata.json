@@ -15,5 +15,5 @@
   "uuid": "openweather-modern@mateusfbi.gmail.com",
   "settings-schema": "org.gnome.shell.extensions.openweather",
   "gettext-domain": "gnome-shell-extension-openweather-modern",
-  "version": 124
+  "version": 125
 }

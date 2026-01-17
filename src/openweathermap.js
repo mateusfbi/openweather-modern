@@ -173,12 +173,12 @@ export async function initWeatherData(refresh) {
                     }
                 }
                 catch (e) {
-                    logError(e);
+                    console.error(e);
                 }
             });
     }
     catch (e) {
-        logError(e);
+        console.error(e);
     }
 }
 
@@ -204,12 +204,12 @@ export async function reloadWeatherCache() {
                     }
                 }
                 catch (e) {
-                    logError(e);
+                    console.error(e);
                 }
             });
     }
     catch (e) {
-        logError(e);
+        console.error(e);
     }
 }
 
@@ -222,7 +222,7 @@ export async function refreshWeatherData() {
         units: 'metric'
     };
     if (this._providerTranslations) {
-        params.lang = this.locale;
+        params.lang = this.locale.replace('-', '_');
     }
     if (this._appid) {
         params.appid = this._appid;
@@ -236,7 +236,7 @@ export async function refreshWeatherData() {
                     await this.populateCurrentUI();
                 }
                 catch (e) {
-                    logError(e);
+                    console.error(e);
                 }
             });
     }
@@ -244,7 +244,8 @@ export async function refreshWeatherData() {
         // Something went wrong, reload after 10 minutes
         // as per openweathermap.org recommendation.
         this.reloadWeatherCurrent(600);
-        logError(e);
+        this._weatherInfo.text = "Err: " + e.toString().substring(0, 15);
+        console.error(e);
     }
     this.reloadWeatherCurrent(this._refresh_interval_current);
 }
@@ -264,7 +265,7 @@ export async function refreshForecastData() {
         units: 'metric'
     };
     if (this._providerTranslations) {
-        params.lang = this.locale;
+        params.lang = this.locale.replace('-', '_');
     }
     if (this._appid) {
         params.appid = this._appid;
@@ -295,7 +296,7 @@ export async function refreshForecastData() {
                                 await this.populateTodaysUI();
                             }
                             catch (e) {
-                                logError(e);
+                                console.error(e);
                             }
                         });
                     // 5 day / 3 hour forecast
@@ -310,12 +311,12 @@ export async function refreshForecastData() {
                                 await this.populateForecastUI();
                             }
                             catch (e) {
-                                logError(e);
+                                console.error(e);
                             }
                         });
                 }
                 catch (e) {
-                    logError(e);
+                    console.error(e);
                 }
             });
     }
@@ -323,7 +324,7 @@ export async function refreshForecastData() {
         /// Something went wrong, reload after 10 minutes
         // as per openweathermap.org recommendation.
         this.reloadWeatherForecast(600);
-        logError(e);
+        console.error(e);
     }
     this.reloadWeatherForecast(this._refresh_interval_forecast);
 }
@@ -384,8 +385,11 @@ export function populateCurrentUI() {
                 this._currentWeatherWind.text = this.formatWind(json.wind.speed, this.getWindDirection(json.wind.deg));
                 if (json.wind.gust != undefined)
                     this._currentWeatherWindGusts.text = this.formatWind(json.wind.gust);
+                else
+                    this._currentWeatherWindGusts.text = '\u2013'; // en dash for "no data"
             } else {
                 this._currentWeatherWind.text = this._("?");
+                this._currentWeatherWindGusts.text = '\u2013';
             }
             resolve(0);
         }
@@ -486,8 +490,22 @@ export function populateForecastUI() {
     });
 }
 
+// Shared session instance
+let _httpSession;
+
 export function loadJsonAsync(url, params, metadata) {
+    console.log("OpenWeather: loadJsonAsync called for " + url);
     return new Promise((resolve, reject) => {
+        if (!metadata) {
+            reject(new Error("Metadata missing"));
+            return;
+        }
+
+        // Initialize session if needed
+        if (!_httpSession) {
+            _httpSession = new Soup.Session();
+            _httpSession.timeout = 30; // 30 seconds timeout
+        }
 
         // Create user-agent string from uuid and (if present) the version
         let _userAgent = metadata.uuid;
@@ -496,26 +514,40 @@ export function loadJsonAsync(url, params, metadata) {
             _userAgent += metadata.version.toString();
         }
 
-        let _httpSession = new Soup.Session();
-        let _paramsHash = Soup.form_encode_hash(params);
-        let _message = Soup.Message.new_from_encoded_form('GET', url, _paramsHash);
-        // add trailing space, so libsoup adds its own user-agent
+        // Update user agent if properly initialized
         _httpSession.user_agent = _userAgent + ' ';
 
-        _httpSession.send_and_read_async(_message, GLib.PRIORITY_DEFAULT, null, (_httpSession, _message) => {
+        let _query = "";
+        let _keys = Object.keys(params);
+        for (let i = 0; i < _keys.length; i++) {
+            _query += _keys[i] + "=" + encodeURIComponent(params[_keys[i]]) + "&";
+        }
+        _query = _query.slice(0, -1); // remove last &
 
-            let bytes = _httpSession.send_and_read_finish(_message).get_data();
-            let decoder = new TextDecoder('utf-8');
-            let _jsonString = decoder.decode(bytes);
+        let _message = Soup.Message.new('GET', url + "?" + _query);
+        console.log("OpenWeather: Sending request...");
+
+        _httpSession.send_and_read_async(_message, GLib.PRIORITY_DEFAULT, null, (_session, _result) => {
+            console.log("OpenWeather: Response received");
 
             try {
+                let bytes = _session.send_and_read_finish(_result);
+
+                if (_message.get_status() !== 200) {
+                    reject(new Error("HTTP " + _message.get_status()));
+                    return;
+                }
+
+                let decoder = new TextDecoder('utf-8');
+                let _jsonString = decoder.decode(bytes.toArray());
+
                 if (!_jsonString) {
                     throw new Error("No data in response body");
                 }
                 resolve(JSON.parse(_jsonString));
             }
             catch (e) {
-                _httpSession.abort();
+                console.log("OpenWeather: Error in callback: " + e);
                 reject(e);
             }
         });
