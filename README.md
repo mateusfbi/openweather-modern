@@ -60,7 +60,7 @@ make && make install
 OpenWeather (*gnome-shell-extension-openweather*) is provided completely free of charge. If you enjoy using this extension and would like to help support the project, please feel free to hit the button below!
 
 <p align="left">
-    <a href="https://www.paypal.com/donate/?hosted_button_id=VZ7VLXPU2M9RQ" target="_blank"><img src="https://gitlab.com/skrewball/assets/-/raw/main/paypal-donate.png" width="250"></a>
+    <a href="https://www.paypal.com/donate/?hosted_button_id=6FLPTVXCJBVVC" target="_blank"><img src="https://gitlab.com/skrewball/assets/-/raw/main/paypal-donate.png" width="250"></a>
 </p>
 
 Or you can support my work by sending some crypto:
