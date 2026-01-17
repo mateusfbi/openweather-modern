@@ -6,7 +6,7 @@
     "46",
     "47"
   ],
-  "url": "https://gitlab.com/skrewball/openweather",
+  "url": "https://github.com/mateusfbi/openweather-modern",
   "fork-maintainer": "Mateus Brandão",
   "original-authors": [
     "Jason Oickle (@skrewball)",
@@ -14,6 +14,6 @@
   ],
   "uuid": "openweather-modern@mateusfbi.gmail.com",
   "settings-schema": "org.gnome.shell.extensions.openweather",
-  "gettext-domain": "gnome-shell-extension-openweather",
-  "version": 122
+  "gettext-domain": "gnome-shell-extension-openweather-modern",
+  "version": 123
 }
