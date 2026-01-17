@@ -63,13 +63,6 @@ OpenWeather (*gnome-shell-extension-openweather*) is provided completely free of
     <a href="https://www.paypal.com/donate/?hosted_button_id=6FLPTVXCJBVVC" target="_blank"><img src="https://gitlab.com/skrewball/assets/-/raw/main/paypal-donate.png" width="250"></a>
 </p>
 
-Or you can support my work by sending some crypto:
-
-- **Bitcoin**: bc1q5r64qtsuxwfywfvesspathy2yun2aagpw58sv6
-- **Monero**: 431XdMq2GsNZUXarUPtvW1j4Amt1VAzR3JYv3CHeZdTaQvn2pSKfFHM8MZi2RpN2B4JSssbKHrxVtNWrdyNDaEh3AZnstqS
-- **Pirate Chain**: zs1eq5ju85hsutvepj9g6ysq80mlsx5wjpdty755z4l37we37crgs7lsk0zy2xyv2566gcyqlkwrla
-- **Equilibria**: Tsz4p7GZpofQpXh2QW5St2Z1bSNfLR82gQLuV6P53LGTjDgzt3YcKt6im2eoYi5bCpddMHRaivYEidA2tE3fGz3e5MmoEtTVfA
-
 <br>
 
 ## Bugs
