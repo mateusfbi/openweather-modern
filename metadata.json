@@ -1,10 +1,13 @@
 {
   "name": "OpenWeather Modern",
-  "description": "Modern fork of OpenWeather for GNOME Shell 45+ with ESM modules. Display weather information for any location on Earth.",
+  "description": "Modern fork of OpenWeather for GNOME Shell 45-50 with ESM modules. Display weather information for any location on Earth.",
   "shell-version": [
     "45",
     "46",
-    "47"
+    "47",
+    "48",
+    "49",
+    "50"
   ],
   "url": "https://github.com/mateusfbi/openweather-modern",
   "fork-maintainer": "Mateus Brandão",
@@ -15,5 +18,5 @@
   "uuid": "openweather-modern@mateusfbi.gmail.com",
   "settings-schema": "org.gnome.shell.extensions.openweather",
   "gettext-domain": "gnome-shell-extension-openweather-modern",
-  "version": 125
+  "version": 126
 }
