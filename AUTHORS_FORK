@@ -1,0 +1,28 @@
+# OpenWeather Modern
+
+## Fork Maintainer (2026-)
+Mateus Brandão <mateusfbi@gmail.com>
+- ESM migration for GNOME Shell 45, 46, 47 (January 2026)
+- Rebranded as "OpenWeather Modern"
+- Portuguese (Brazil) translation improvements
+
+## Original Project Authors
+
+This is a modern fork of the OpenWeather extension:
+https://gitlab.com/skrewball/openweather
+
+### Current Maintainer (Original Project)
+Jason Oickle (@skrewball)
+- Project maintainer since 2022
+
+### Original Creator
+Jens Lody (@jenslody)
+- Original extension creator
+
+### Previous Contributors
+For a complete list of contributors to the original project, see:
+https://gitlab.com/skrewball/openweather/-/blob/master/AUTHORS
+
+## License
+This fork maintains the same GPLv3 license as the original project.
+See COPYING for details.
