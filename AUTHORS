@@ -1,27 +1,28 @@
-# This is the list of OpenWeather's significant contributors.
-#
-# This does not necessarily list everyone who has contributed
-# code. To see the full list of contributors, see the revision
-# history in source control.
+# OpenWeather Modern
 
-# Current Author
+## Fork Maintainer (2026-)
+Mateus Brandão <mateusfbi@gmail.com>
+- ESM migration for GNOME Shell 45, 46, 47 (January 2026)
+- Rebranded as "OpenWeather Modern"
+- Portuguese (Brazil) translation improvements
 
-     2022 - Jason Oickle
+## Original Project Authors
 
-# Previous Author
+This is a modern fork of the OpenWeather extension:
+https://gitlab.com/skrewball/openweather
 
-2013-2021 - Jens Lody
+### Current Maintainer (Original Project)
+Jason Oickle (@skrewball)
+- Project maintainer since 2022
 
+### Original Creator
+Jens Lody (@jenslody)
+- Original extension creator
 
-# The individuals below have contributed to the project prior
-# to the projects current fork:
+### Previous Contributors
+For a complete list of contributors to the original project, see:
+https://gitlab.com/skrewball/openweather/-/blob/master/AUTHORS
 
-     2018 - Taylor Raack
-2011-2013 - Christian Metzler
-            Elad Alfassa
-            Mark Benjamin
-            Simon Claessens
-            Ecyrbe
-            Timur Kristóf
-            Simon Legner
-            Mattia Meneguzzo
+## License
+This fork maintains the same GPLv3 license as the original project.
+See COPYING for details.

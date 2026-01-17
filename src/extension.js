@@ -296,11 +296,18 @@ let OpenWeatherMenuButton = GObject.registerClass(
             this._providerTranslations = this._provider_translations;
 
             // Get locale
-            this.locale = GLib.get_language_names()[0];
-            if (this.locale.indexOf('_') != -1)
-                this.locale = this.locale.split("_")[0];
-            else  // Fallback for 'C', 'C.UTF-8', and unknown locales.
+            // Get locale
+            let lang = GLib.get_language_names()[0];
+            if (lang) {
+                // Strip encoding (e.g. .UTF-8)
+                lang = lang.split('.')[0];
+                if (lang === 'C')
+                    this.locale = 'en';
+                else
+                    this.locale = lang;
+            } else {
                 this.locale = 'en';
+            }
 
             // Bind to settings changed signal
             this._settingsC = this._settings.connect("changed", () => {
