@@ -18,6 +18,7 @@
 import Clutter from 'gi://Clutter';
 import Gio from 'gi://Gio';
 import Gtk from 'gi://Gtk';
+import Gdk from 'gi://Gdk';
 import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import St from 'gi://St';
@@ -104,10 +105,7 @@ let OpenWeatherMenuButton = GObject.registerClass(
             topBox.add_child(this._weatherInfo);
             this.add_child(topBox);
 
-            if (Main.panel._menus === undefined)
-                Main.panel.menuManager.addMenu(this.menu);
-            else
-                Main.panel._menus.addMenu(this.menu);
+            // Menu is already added to Manager by PanelMenu.Button._init
 
             // Load settings
             this.loadConfig();
@@ -819,7 +817,6 @@ let OpenWeatherMenuButton = GObject.registerClass(
 
         rebuildSelectCityItem() {
             this._selectCity.menu.removeAll();
-            let item = null;
 
             let cities = this._cities;
             cities = cities.split(" && ");
@@ -829,7 +826,7 @@ let OpenWeatherMenuButton = GObject.registerClass(
                 return;
 
             for (let i = 0; cities.length > i; i++) {
-                item = new PopupMenu.PopupMenuItem(this.extractLocation(cities[i]));
+                let item = new PopupMenu.PopupMenuItem(this.extractLocation(cities[i]));
                 item.location = i;
                 if (i == this._actual_city) {
                     item.setOrnament(PopupMenu.Ornament.DOT);
@@ -837,17 +834,15 @@ let OpenWeatherMenuButton = GObject.registerClass(
 
                 this._selectCity.menu.addMenuItem(item);
                 // override the items default onActivate-handler, to keep the ui open while choosing the location
-                item.activate = this._onActivate;
+                item.activate = () => {
+                    this._actual_city = item.location;
+                };
             }
 
             if (cities.length == 1)
                 this._selectCity.actor.hide();
             else
                 this._selectCity.actor.show();
-        }
-
-        _onActivate() {
-            openWeatherMenu._actual_city = this.location;
         }
 
         extractLocation() {
@@ -1016,7 +1011,8 @@ let OpenWeatherMenuButton = GObject.registerClass(
 
         getWeatherIcon(iconname) {
             // Built-in icons option and fallback for missing icons on some distros
-            if (this._getUseSysIcons && Gtk.IconTheme.get_default().has_icon(iconname)) {
+            let display = Gdk.Display.get_default();
+            if (this._getUseSysIcons && display && Gtk.IconTheme.get_for_display(display).has_icon(iconname)) {
                 return Gio.icon_new_for_string(iconname);
             } // No icon available or user prefers built in icons
             else {
@@ -1039,20 +1035,23 @@ let OpenWeatherMenuButton = GObject.registerClass(
             ) {
                 this.get_parent().remove_child(this);
 
-                let children = null;
-                switch (this._position_in_panel) {
-                    case WeatherPosition.LEFT:
-                        children = Main.panel._leftBox.get_children();
-                        Main.panel._leftBox.insert_child_at_index(this, this._position_index);
-                        break;
-                    case WeatherPosition.CENTER:
-                        children = Main.panel._centerBox.get_children();
-                        Main.panel._centerBox.insert_child_at_index(this, this._position_index);
-                        break;
-                    case WeatherPosition.RIGHT:
-                        children = Main.panel._rightBox.get_children();
-                        Main.panel._rightBox.insert_child_at_index(this, this._position_index);
-                        break;
+                try {
+                    switch (this._position_in_panel) {
+                        case WeatherPosition.LEFT:
+                            if (Main.panel._leftBox)
+                                Main.panel._leftBox.insert_child_at_index(this, this._position_index);
+                            break;
+                        case WeatherPosition.CENTER:
+                            if (Main.panel._centerBox)
+                                Main.panel._centerBox.insert_child_at_index(this, this._position_index);
+                            break;
+                        case WeatherPosition.RIGHT:
+                            if (Main.panel._rightBox)
+                                Main.panel._rightBox.insert_child_at_index(this, this._position_index);
+                            break;
+                    }
+                } catch (e) {
+                    console.error("OpenWeather: Failed to reparent button: " + e);
                 }
                 this._old_position_in_panel = this._position_in_panel;
                 this._old_position_index = this._position_index;

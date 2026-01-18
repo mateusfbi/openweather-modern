@@ -687,7 +687,7 @@ var SearchResultsWindow = GObject.registerClass(
 
                 _httpSession.send_and_read_async(_message, GLib.PRIORITY_DEFAULT, null, (_httpSession, _message) => {
 
-                    let bytes = _httpSession.send_and_read_finish(_message).get_data();
+                    let bytes = _httpSession.send_and_read_finish(_message).toArray();
                     let decoder = new TextDecoder('utf-8');
                     let _jsonString = decoder.decode(bytes);
                     try {

@@ -28,7 +28,7 @@ import * as AboutPrefs from './preferences/aboutPage.js';
 
 export default class OpenWeatherPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
-        let iconTheme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default());
+        let iconTheme = Gtk.IconTheme.get_for_display(window.get_display());
         if (!iconTheme.get_search_path().includes(this.path + "/media")) {
             iconTheme.add_search_path(this.path + "/media");
         }
